@@ -27,7 +27,6 @@ public class FrgmntTwo extends Fragment {
 
 
     private RecyclerView mUploadList;
-
     DatabaseReference mUsersDatabase;
     Context ctx;
     ImageView image;
