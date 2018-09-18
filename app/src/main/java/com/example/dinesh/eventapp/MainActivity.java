@@ -261,31 +261,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onQueryTextSubmit(String s) {
 
-
-        s = s.toLowerCase();
-        int pos = viewPager.getCurrentItem();
-        Fragment activeFragment = viewPagerAdapter.getItem(pos);
-        if (pos == 0) {
-            ((FrgmntOne) activeFragment).firebaseSearch(s);
-        }
-
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String s) {
-
-
-
-        s = s.toLowerCase();
-        int pos = viewPager.getCurrentItem();
-        Fragment activeFragment = viewPagerAdapter.getItem(pos);
-        if (pos == 0) {
-            ((FrgmntOne) activeFragment).firebaseSearch(s);
-        }
-
-
-
 
         return false;
     }
