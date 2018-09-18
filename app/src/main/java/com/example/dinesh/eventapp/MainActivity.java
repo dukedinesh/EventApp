@@ -8,11 +8,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -29,7 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
 
 
     TabLayout tabLayout;
@@ -100,6 +104,8 @@ public class MainActivity extends AppCompatActivity
         name = (TextView) headerView.findViewById(R.id.user_name);
 
 
+
+
     }
 
 
@@ -117,6 +123,12 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main2, menu);
+
+        MenuItem menuItem = menu.findItem(R.id.action_settings);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
+
+        searchView.setOnQueryTextListener(this);
+
         return true;
     }
 
@@ -140,14 +152,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
+        if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_log_out) {
 
@@ -250,5 +255,38 @@ public class MainActivity extends AppCompatActivity
         tabLayout.setupWithViewPager(viewPager);
 
 
+    }
+
+
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+
+
+        s = s.toLowerCase();
+        int pos = viewPager.getCurrentItem();
+        Fragment activeFragment = viewPagerAdapter.getItem(pos);
+        if (pos == 0) {
+            ((FrgmntOne) activeFragment).firebaseSearch(s);
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+
+
+
+        s = s.toLowerCase();
+        int pos = viewPager.getCurrentItem();
+        Fragment activeFragment = viewPagerAdapter.getItem(pos);
+        if (pos == 0) {
+            ((FrgmntOne) activeFragment).firebaseSearch(s);
+        }
+
+
+
+
+        return false;
     }
 }
