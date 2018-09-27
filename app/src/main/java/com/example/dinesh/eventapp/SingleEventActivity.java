@@ -44,6 +44,7 @@ public class SingleEventActivity extends AppCompatActivity {
     DatabaseReference mUserDatabase;
     DatabaseReference mDatabase;
     DatabaseReference mUserEvent;
+    DatabaseReference mUsersName;
     String url, event;
     private Slider slider;
     TextView locaion, fromtxt, tilltxt, event_nametxt, destxt;
@@ -51,7 +52,7 @@ public class SingleEventActivity extends AppCompatActivity {
     Button register_btn;
     private FirebaseAuth firebaseAuth;
     ProgressDialog dialog;
-    String event_name;
+    String event_name, user_name, uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +69,6 @@ public class SingleEventActivity extends AppCompatActivity {
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Events").child(s);
-
         fromtxt = (TextView) findViewById(R.id.from);
         tilltxt = (TextView) findViewById(R.id.till);
         locaion = (TextView) findViewById(R.id.location);
@@ -81,6 +79,30 @@ public class SingleEventActivity extends AppCompatActivity {
         slider = findViewById(R.id.banner_slider1);
 
 
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        if (firebaseAuth.getCurrentUser() != null) {
+
+            FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
+            uid = current_user.getUid();
+            mUsersName = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+            mUsersName.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    user_name = dataSnapshot.child("name").getValue().toString();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+        }
+
+        mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Events").child(s);
         mUserDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -148,8 +170,6 @@ public class SingleEventActivity extends AppCompatActivity {
                     dialog = ProgressDialog.show(SingleEventActivity.this, "Requesting",
                             "Please wait...", true);
 
-                    FirebaseUser current_user = FirebaseAuth.getInstance().getCurrentUser();
-                    String uid = current_user.getUid();
                     mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("requested_events").child(s);
                     mUserEvent = FirebaseDatabase.getInstance().getReference().child("Events").child(s).child("requested_users").child(uid);
 
@@ -157,9 +177,10 @@ public class SingleEventActivity extends AppCompatActivity {
                     Map userMap = new HashMap();
                     userMap.put("requested_user", uid);
                     userMap.put("status", "pending");
+                    userMap.put("user_name", user_name);
 
                     final Map map = new HashMap();
-                    map.put("event",s);
+                    map.put("event", s);
                     map.put("status", "pending");
 
                     mUserEvent.updateChildren(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -179,7 +200,7 @@ public class SingleEventActivity extends AppCompatActivity {
                                                 SingleEventActivity.this);
 
                                         // set title
-                                        alertDialogBuilder.setTitle("Request Sent.");
+                                        alertDialogBuilder.setTitle("Request Sent");
 
                                         // set dialog message
                                         alertDialogBuilder
@@ -238,7 +259,7 @@ public class SingleEventActivity extends AppCompatActivity {
                     viewHolder.bindImageSlide(url);
                     break;
                 case 1:
-                    viewHolder.bindImageSlide("https://assets.materialup.com/uploads/20ded50d-cc85-4e72-9ce3-452671cf7a6d/preview.jpg");
+                    viewHolder.bindImageSlide(/*"https://assets.materialup.com/uploads/20ded50d-cc85-4e72-9ce3-452671cf7a6d/preview.jpg"*/url);
                     break;
                 case 2:
                     viewHolder.bindImageSlide(/*"https://assets.materialup.com/uploads/76d63bbc-54a1-450a-a462-d90056be881b/preview.png"*/url);

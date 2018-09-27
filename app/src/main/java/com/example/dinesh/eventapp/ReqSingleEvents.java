@@ -132,7 +132,7 @@ public class ReqSingleEvents extends AppCompatActivity {
                     viewHolder.bindImageSlide(url);
                     break;
                 case 1:
-                    viewHolder.bindImageSlide("https://assets.materialup.com/uploads/20ded50d-cc85-4e72-9ce3-452671cf7a6d/preview.jpg");
+                    viewHolder.bindImageSlide(/*"https://assets.materialup.com/uploads/20ded50d-cc85-4e72-9ce3-452671cf7a6d/preview.jpg"*/url);
                     break;
                 case 2:
                     viewHolder.bindImageSlide(/*"https://assets.materialup.com/uploads/76d63bbc-54a1-450a-a462-d90056be881b/preview.png"*/url);

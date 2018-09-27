@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity
     TabLayout tabLayout;
     ViewPager viewPager;
     ViewPagerAdapter viewPagerAdapter;
-
     private FirebaseAuth firebaseAuth;
     DatabaseReference mUserDatabase;
     String user_name, uid;
@@ -102,8 +101,6 @@ public class MainActivity extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
 
         name = (TextView) headerView.findViewById(R.id.user_name);
-
-
 
 
     }
